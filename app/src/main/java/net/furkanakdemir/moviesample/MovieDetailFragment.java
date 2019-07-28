@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import dagger.android.support.DaggerFragment;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieDetailFragment extends Fragment {
+public class MovieDetailFragment extends DaggerFragment {
 
 
     public MovieDetailFragment() {

@@ -1,13 +1,23 @@
 package net.furkanakdemir.moviesample;
 
+import net.furkanakdemir.moviesample.di.DaggerAppComponent;
+
+import javax.inject.Inject;
+
 import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.DaggerApplication;
 import timber.log.Timber;
 
 public class MovieApplication extends DaggerApplication {
+
+    @Inject
+    DispatchingAndroidInjector<Object> androidInjector;
+
     @Override
     public void onCreate() {
         super.onCreate();
+
 
         setupTimber();
 
@@ -22,6 +32,6 @@ public class MovieApplication extends DaggerApplication {
 
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-        return null;
+        return DaggerAppComponent.factory().create(this);
     }
 }

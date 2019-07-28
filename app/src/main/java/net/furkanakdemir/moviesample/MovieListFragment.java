@@ -13,11 +13,13 @@ import androidx.navigation.Navigation;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import dagger.android.support.DaggerFragment;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieListFragment extends Fragment {
+public class MovieListFragment extends DaggerFragment {
 
 
     public MovieListFragment() {
