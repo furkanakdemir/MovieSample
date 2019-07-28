@@ -18,6 +18,12 @@ import java.util.List;
 public class MovieAdapter extends Adapter<MovieAdapter.MovieViewHolder> {
 
     private List<Movie> movies = new ArrayList<>();
+    private OnMovieCallback onMovieCallback;
+
+
+    public MovieAdapter(OnMovieCallback onMovieCallback) {
+        this.onMovieCallback = onMovieCallback;
+    }
 
     @NonNull
     @Override
@@ -34,6 +40,13 @@ public class MovieAdapter extends Adapter<MovieAdapter.MovieViewHolder> {
 
         holder.nameTextView.setText(movie.getName());
         holder.releaseDateTextView.setText(movie.getReleaseDate());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onMovieCallback.onMovieClicked(movie);
+            }
+        });
     }
 
     @Override
@@ -57,5 +70,9 @@ public class MovieAdapter extends Adapter<MovieAdapter.MovieViewHolder> {
             nameTextView = itemView.findViewById(R.id.nameTextView);
             releaseDateTextView = itemView.findViewById(R.id.releaseDateTextView);
         }
+    }
+
+    interface OnMovieCallback {
+        void onMovieClicked(Movie movie);
     }
 }

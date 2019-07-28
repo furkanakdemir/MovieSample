@@ -9,10 +9,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.furkanakdemir.moviesample.R;
 import net.furkanakdemir.moviesample.data.FakeMovieRepository;
@@ -28,12 +27,13 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieListFragment extends DaggerFragment {
+public class MovieListFragment extends DaggerFragment implements MovieAdapter.OnMovieCallback {
 
     @BindView(R.id.moviesRecyclerView)
     RecyclerView moviesRecyclerView;
@@ -63,10 +63,8 @@ public class MovieListFragment extends DaggerFragment {
 
         movieRepository = new FakeMovieRepository();
 
-        FloatingActionButton fab = requireActivity().findViewById(R.id.fab);
 
-
-        movieAdapter = new MovieAdapter();
+        movieAdapter = new MovieAdapter(this);
         moviesRecyclerView.setAdapter(movieAdapter);
 
         movieRepository.getMovies()
@@ -93,15 +91,12 @@ public class MovieListFragment extends DaggerFragment {
 
                     }
                 });
+    }
 
-
-
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_movieListFragment_to_movieDetailFragment);
-            }
-        });
+    @Override
+    public void onMovieClicked(Movie movie) {
+        Timber.i("Name: %s", movie.getName());
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+        navController.navigate(R.id.action_movieListFragment_to_movieDetailFragment);
     }
 }

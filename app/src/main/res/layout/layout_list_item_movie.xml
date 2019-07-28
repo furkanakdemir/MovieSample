@@ -4,7 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="128dp"
-    android:orientation="vertical">
+    android:clickable="true"
+    android:foreground="?android:selectableItemBackground"
+    android:orientation="vertical"
+    tools:ignore="UnusedAttribute"
+    android:focusable="true">
 
 
     <ImageView
