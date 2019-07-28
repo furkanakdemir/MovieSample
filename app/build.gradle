@@ -17,6 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 
@@ -24,6 +28,7 @@ ext {
     dagger = "2.23.2"
     navigation = "2.1.0-beta02"
     lifecycle = "2.0.0"
+    timber = "4.7.1"
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -66,6 +71,9 @@ dependencies {
     implementation "com.google.dagger:dagger-android:$dagger"
     implementation "com.google.dagger:dagger-android-support:$dagger"
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger"
+
+    // Logging
+    implementation "com.jakewharton.timber:timber:$timber"
 
     // Test Libraries
     androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
