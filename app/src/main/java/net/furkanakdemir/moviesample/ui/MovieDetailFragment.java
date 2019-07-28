@@ -1,4 +1,4 @@
-package net.furkanakdemir.moviesample;
+package net.furkanakdemir.moviesample.ui;
 
 
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import net.furkanakdemir.moviesample.R;
 
 import dagger.android.support.DaggerFragment;
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
-interface MovieRepository {
+public interface MovieRepository {
 
     Observable<List<Movie>> getMovies();
 }

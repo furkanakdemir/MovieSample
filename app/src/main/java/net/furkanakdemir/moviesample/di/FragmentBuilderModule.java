@@ -1,8 +1,8 @@
 package net.furkanakdemir.moviesample.di;
 
 
-import net.furkanakdemir.moviesample.MovieDetailFragment;
-import net.furkanakdemir.moviesample.MovieListFragment;
+import net.furkanakdemir.moviesample.ui.MovieDetailFragment;
+import net.furkanakdemir.moviesample.ui.MovieListFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
