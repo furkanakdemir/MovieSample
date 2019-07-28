@@ -1,3 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="shrine_toolbar_offset_start">16dp</dimen>
+    <dimen name="shrine_toolbar_offset_top">16dp</dimen>
+    <dimen name="shrine_toolbar_image_offset_top">16dp</dimen>
+    <dimen name="height_movie_detail_info_row">56dp</dimen>
 </resources>

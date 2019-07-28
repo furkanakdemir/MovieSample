@@ -2,9 +2,7 @@ package net.furkanakdemir.moviesample.ui;
 
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,8 +19,6 @@ import net.furkanakdemir.moviesample.data.MovieRepository;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import dagger.android.support.DaggerFragment;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -33,7 +29,7 @@ import timber.log.Timber;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieListFragment extends DaggerFragment implements MovieAdapter.OnMovieCallback {
+public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMovieCallback {
 
     @BindView(R.id.moviesRecyclerView)
     RecyclerView moviesRecyclerView;
@@ -49,11 +45,8 @@ public class MovieListFragment extends DaggerFragment implements MovieAdapter.On
 
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_movie_list, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+    int getLayoutId() {
+        return R.layout.fragment_movie_list;
     }
 
 
