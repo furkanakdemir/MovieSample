@@ -2,6 +2,7 @@ package net.furkanakdemir.moviesample.di;
 
 
 import net.furkanakdemir.moviesample.MainActivity;
+import net.furkanakdemir.moviesample.network.NetworkModule;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -10,6 +11,6 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class ActivityBuilderModule {
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = FragmentBuilderModule.class)
+    @ContributesAndroidInjector(modules = {FragmentBuilderModule.class, NetworkModule.class})
     abstract MainActivity bindMainActivity();
 }

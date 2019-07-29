@@ -18,12 +18,16 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.furkanakdemir.moviesample.R;
-import net.furkanakdemir.moviesample.data.FakeMovieRepository;
 import net.furkanakdemir.moviesample.data.Movie;
+import net.furkanakdemir.moviesample.data.MovieDomainMapper;
 import net.furkanakdemir.moviesample.data.MovieRepository;
+import net.furkanakdemir.moviesample.data.RealMovieRepository;
+import net.furkanakdemir.moviesample.network.MovieService;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import io.reactivex.Observer;
@@ -54,6 +58,13 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
     private MovieRepository movieRepository;
 
     PublishSubject<String> publishSubject = PublishSubject.create();
+
+
+    @Inject
+    MovieService movieService;
+
+    @Inject
+    MovieDomainMapper movieDomainMapper;
 
 
     public MovieListFragment() {
@@ -133,7 +144,7 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
         setupToolbar();
 
 
-        movieRepository = new FakeMovieRepository();
+        movieRepository = new RealMovieRepository(movieService, movieDomainMapper);
 
 
         movieAdapter = new MovieAdapter(this);
@@ -155,6 +166,7 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
 
                     @Override
                     public void onError(Throwable e) {
+                        Timber.e(e);
 
                     }
 
