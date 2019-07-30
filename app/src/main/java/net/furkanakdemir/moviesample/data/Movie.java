@@ -7,6 +7,7 @@ public class Movie {
     private String releaseDate;
     private String overview;
     private String posterUrl;
+    private String backdropUrl;
 
     public String getId() {
         return id;
@@ -28,12 +29,18 @@ public class Movie {
         return posterUrl;
     }
 
+    public String getBackdropUrl() {
+        return backdropUrl;
+    }
+
+
     public static final class MovieBuilder {
         private String id;
         private String name;
         private String releaseDate;
         private String overview;
         private String posterUrl;
+        private String backdropUrl;
 
         private MovieBuilder() {
         }
@@ -67,13 +74,19 @@ public class Movie {
             return this;
         }
 
+        public MovieBuilder backdropUrl(String backdropUrl) {
+            this.backdropUrl = backdropUrl;
+            return this;
+        }
+
         public Movie build() {
             Movie movie = new Movie();
-            movie.posterUrl = this.posterUrl;
-            movie.id = this.id;
             movie.overview = this.overview;
-            movie.name = this.name;
             movie.releaseDate = this.releaseDate;
+            movie.id = this.id;
+            movie.name = this.name;
+            movie.posterUrl = this.posterUrl;
+            movie.backdropUrl = this.backdropUrl;
             return movie;
         }
     }

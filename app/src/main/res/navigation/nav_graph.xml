@@ -18,5 +18,13 @@
         android:id="@+id/movieDetailFragment"
         android:name="net.furkanakdemir.moviesample.ui.MovieDetailFragment"
         android:label="fragment_movie_detail"
-        tools:layout="@layout/fragment_movie_detail" />
+        tools:layout="@layout/fragment_movie_detail">
+
+        <argument
+            android:name="movie"
+            app:argType="net.furkanakdemir.moviesample.ui.MovieViewItem"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+    </fragment>
 </navigation>

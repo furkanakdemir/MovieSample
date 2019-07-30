@@ -21,6 +21,11 @@ public class MovieModule {
     }
 
     @Provides
+    public MovieViewMapper provideMovieViewMapper() {
+        return new MovieViewMapper();
+    }
+
+    @Provides
     public MovieRepository provideMovieRepository(MovieService movieService,
                                                   MovieDomainMapper mapper) {
         return new RealMovieRepository(movieService, mapper);

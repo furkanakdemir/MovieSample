@@ -34,6 +34,9 @@ public class MoviePageResponse {
         @SerializedName("poster_path")
         public String posterPath;
 
+        @SerializedName("backdrop_path")
+        public String backdropPath;
+
         @SerializedName("release_date")
         public String releaseDate;
 

@@ -23,6 +23,7 @@ public class MovieDomainMapper {
                 .releaseDate(dateFormatter.formatDate(movieRaw.releaseDate))
                 .posterUrl(movieRaw.posterPath)
                 .overview(movieRaw.overview)
+                .backdropUrl(movieRaw.backdropPath)
                 .build();
     }
 }

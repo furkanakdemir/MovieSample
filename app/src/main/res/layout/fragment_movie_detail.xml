@@ -8,7 +8,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title">
@@ -40,9 +40,9 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="100dp"
-                android:scaleType="centerCrop"
                 android:src="@drawable/land"
+                android:scaleType="centerCrop"
+                android:id="@+id/posterImageView"
                 app:layout_collapseMode="parallax"
                 app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" />
 

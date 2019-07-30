@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,6 +61,9 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
 
     @Inject
     ImageLoader imageLoader;
+
+    @Inject
+    MovieViewMapper movieViewMapper;
 
 
     public MovieListFragment() {
@@ -164,6 +168,11 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
     public void onMovieClicked(Movie movie) {
         Timber.i("Name: %s", movie.getName());
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
-        navController.navigate(R.id.action_movieListFragment_to_movieDetailFragment);
+
+        NavDirections detailDirection = MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment().setMovie(
+                movieViewMapper.map(movie)
+        );
+
+        navController.navigate(detailDirection);
     }
 }
