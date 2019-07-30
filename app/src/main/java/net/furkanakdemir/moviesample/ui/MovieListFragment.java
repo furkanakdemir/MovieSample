@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.furkanakdemir.moviesample.R;
 import net.furkanakdemir.moviesample.data.Movie;
+import net.furkanakdemir.moviesample.image.ImageLoader;
 import net.furkanakdemir.moviesample.ui.base.BaseFragment;
 
 import java.util.concurrent.TimeUnit;
@@ -55,6 +56,10 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+
+
+    @Inject
+    ImageLoader imageLoader;
 
 
     public MovieListFragment() {
@@ -140,7 +145,7 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
         });
 
 
-        movieAdapter = new MovieAdapter(this);
+        movieAdapter = new MovieAdapter(this, imageLoader);
         moviesRecyclerView.setAdapter(movieAdapter);
 
 

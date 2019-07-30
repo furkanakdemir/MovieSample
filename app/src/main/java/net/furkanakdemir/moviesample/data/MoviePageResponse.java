@@ -37,5 +37,8 @@ public class MoviePageResponse {
         @SerializedName("release_date")
         public String releaseDate;
 
+        @SerializedName("overview")
+        public String overview;
+
     }
 }

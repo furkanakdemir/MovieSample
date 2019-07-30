@@ -6,6 +6,8 @@ import net.furkanakdemir.moviesample.data.MovieRepository;
 import net.furkanakdemir.moviesample.data.RealMovieRepository;
 import net.furkanakdemir.moviesample.network.MovieService;
 import net.furkanakdemir.moviesample.network.NetworkModule;
+import net.furkanakdemir.moviesample.util.DateFormatter;
+import net.furkanakdemir.moviesample.util.MovieDateFormatter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -14,14 +16,19 @@ import dagger.Provides;
 public class MovieModule {
 
     @Provides
-    public MovieDomainMapper provideMovieDomainMapper() {
-        return new MovieDomainMapper();
+    public MovieDomainMapper provideMovieDomainMapper(DateFormatter dateFormatter) {
+        return new MovieDomainMapper(dateFormatter);
     }
 
     @Provides
     public MovieRepository provideMovieRepository(MovieService movieService,
                                                   MovieDomainMapper mapper) {
         return new RealMovieRepository(movieService, mapper);
+    }
+
+    @Provides
+    DateFormatter provideDateFormatter() {
+        return new MovieDateFormatter();
     }
 
 }
