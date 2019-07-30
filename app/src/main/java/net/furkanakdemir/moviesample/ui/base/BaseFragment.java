@@ -1,11 +1,10 @@
-package net.furkanakdemir.moviesample.ui;
+package net.furkanakdemir.moviesample.ui.base;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 
 import butterknife.ButterKnife;
@@ -18,8 +17,7 @@ public abstract class BaseFragment extends DaggerFragment {
         // Required empty public constructor
     }
 
-    abstract @LayoutRes
-    int getLayoutId();
+    public abstract int getLayoutId();
 
 
     @Override

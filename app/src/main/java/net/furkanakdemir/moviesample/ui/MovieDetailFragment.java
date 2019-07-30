@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import net.furkanakdemir.moviesample.R;
+import net.furkanakdemir.moviesample.ui.base.BaseFragment;
 
 import butterknife.BindView;
 
@@ -40,7 +41,7 @@ public class MovieDetailFragment extends BaseFragment {
     }
 
     @Override
-    int getLayoutId() {
+    public int getLayoutId() {
         return R.layout.fragment_movie_detail;
     }
 

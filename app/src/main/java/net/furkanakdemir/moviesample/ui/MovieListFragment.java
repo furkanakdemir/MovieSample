@@ -13,26 +13,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.furkanakdemir.moviesample.R;
 import net.furkanakdemir.moviesample.data.Movie;
-import net.furkanakdemir.moviesample.data.MovieDomainMapper;
-import net.furkanakdemir.moviesample.data.MovieRepository;
-import net.furkanakdemir.moviesample.data.RealMovieRepository;
-import net.furkanakdemir.moviesample.network.MovieService;
+import net.furkanakdemir.moviesample.ui.base.BaseFragment;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
@@ -55,16 +51,10 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
 
     private MovieAdapter movieAdapter;
 
-    private MovieRepository movieRepository;
-
     PublishSubject<String> publishSubject = PublishSubject.create();
 
-
     @Inject
-    MovieService movieService;
-
-    @Inject
-    MovieDomainMapper movieDomainMapper;
+    ViewModelProvider.Factory viewModelFactory;
 
 
     public MovieListFragment() {
@@ -73,7 +63,7 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
 
 
     @Override
-    int getLayoutId() {
+    public int getLayoutId() {
         return R.layout.fragment_movie_list;
     }
 
@@ -144,37 +134,16 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
         setupToolbar();
 
 
-        movieRepository = new RealMovieRepository(movieService, movieDomainMapper);
+        MovieListViewModel model = ViewModelProviders.of(this, viewModelFactory).get(MovieListViewModel.class);
+        model.getMovies().observe(getViewLifecycleOwner(), movieList -> {
+            movieAdapter.updateList(movieList);
+        });
 
 
         movieAdapter = new MovieAdapter(this);
         moviesRecyclerView.setAdapter(movieAdapter);
 
-        movieRepository.getMovies()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Movie>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
 
-                    }
-
-                    @Override
-                    public void onNext(List<Movie> movieList) {
-                        movieAdapter.updateList(movieList);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
     }
 
     private void setupToolbar() {
