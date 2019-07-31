@@ -25,6 +25,8 @@ public class MovieListViewModel extends ViewModel {
     private static final int LIMIT_SEARCH = 2;
 
     private MutableLiveData<List<Movie>> movies;
+    private MutableLiveData<Boolean> loading = new MutableLiveData<>();
+
     private MovieRepository movieRepository;
 
     private CompositeDisposable disposables = new CompositeDisposable();
@@ -42,10 +44,16 @@ public class MovieListViewModel extends ViewModel {
         return movies;
     }
 
+    public LiveData<Boolean> getLoadingLiveData() {
+        return loading;
+    }
+
     private void loadMovies() {
+        loading.setValue(true);
         movieRepository.getMovies()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnTerminate(() -> loading.setValue(false))
                 .subscribe(new Observer<List<Movie>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -81,9 +89,11 @@ public class MovieListViewModel extends ViewModel {
     }
 
     private void searchInternal(String query) {
+        loading.setValue(true);
         movieRepository.search(query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnTerminate(() -> loading.setValue(false))
                 .subscribe(new Observer<List<Movie>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
