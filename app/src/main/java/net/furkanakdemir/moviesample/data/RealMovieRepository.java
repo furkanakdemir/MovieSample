@@ -41,4 +41,22 @@ public class RealMovieRepository implements MovieRepository {
                     }
                 });
     }
+
+    @Override
+    public Observable<List<Movie>> search(String query) {
+        return movieService.search(query, 1)
+                .map(new Function<MoviePageResponse, List<Movie>>() {
+                    @Override
+                    public List<Movie> apply(MoviePageResponse moviePageResponse) throws Exception {
+
+                        List<Movie> list = new ArrayList<>();
+
+                        for (MoviePageResponse.MovieRaw movieRaw : moviePageResponse.movieRawList) {
+                            list.add(mapper.map(movieRaw));
+                        }
+
+                        return list;
+                    }
+                });
+    }
 }

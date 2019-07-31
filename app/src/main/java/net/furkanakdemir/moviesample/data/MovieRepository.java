@@ -7,4 +7,6 @@ import io.reactivex.Observable;
 public interface MovieRepository {
 
     Observable<List<Movie>> getMovies();
+
+    Observable<List<Movie>> search(String query);
 }

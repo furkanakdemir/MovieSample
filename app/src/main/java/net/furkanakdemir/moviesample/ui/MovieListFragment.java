@@ -65,6 +65,8 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
     @Inject
     MovieViewMapper movieViewMapper;
 
+    private MovieListViewModel movieListViewModel;
+
 
     public MovieListFragment() {
         // Required empty public constructor
@@ -106,6 +108,8 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
                     @Override
                     public void onNext(String query) {
                         Timber.i("Query %s", query);
+
+                        movieListViewModel.search(query);
                     }
 
                     @Override
@@ -143,8 +147,8 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
         setupToolbar();
 
 
-        MovieListViewModel model = ViewModelProviders.of(this, viewModelFactory).get(MovieListViewModel.class);
-        model.getMovies().observe(getViewLifecycleOwner(), movieList -> {
+        movieListViewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieListViewModel.class);
+        movieListViewModel.getMovies().observe(getViewLifecycleOwner(), movieList -> {
             movieAdapter.updateList(movieList);
         });
 

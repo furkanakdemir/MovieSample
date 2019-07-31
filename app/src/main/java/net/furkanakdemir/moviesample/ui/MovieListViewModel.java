@@ -22,6 +22,8 @@ import timber.log.Timber;
 public class MovieListViewModel extends ViewModel {
 
 
+    private static final int LIMIT_SEARCH = 2;
+
     private MutableLiveData<List<Movie>> movies;
     private MovieRepository movieRepository;
 
@@ -42,6 +44,44 @@ public class MovieListViewModel extends ViewModel {
 
     private void loadMovies() {
         movieRepository.getMovies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Movie>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposables.add(d);
+                    }
+
+                    @Override
+                    public void onNext(List<Movie> movieList) {
+                        movies.setValue(movieList);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e);
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public void search(String query) {
+
+        if (query.length() > LIMIT_SEARCH) {
+            searchInternal(query);
+        } else {
+            loadMovies();
+        }
+
+    }
+
+    private void searchInternal(String query) {
+        movieRepository.search(query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<Movie>>() {

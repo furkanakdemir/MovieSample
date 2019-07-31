@@ -1,6 +1,7 @@
 package net.furkanakdemir.moviesample.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -18,5 +19,10 @@ public class FakeMovieRepository implements MovieRepository {
                     .build());
         }
         return Observable.just(list);
+    }
+
+    @Override
+    public Observable<List<Movie>> search(String query) {
+        return Observable.just(Collections.emptyList());
     }
 }
