@@ -16,6 +16,7 @@ public class MovieDateFormatter implements DateFormatter {
 
     public String formatDate(String dateString) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        format.setLenient(false);
         Date date = null;
         try {
             date = format.parse(dateString);
