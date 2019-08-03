@@ -87,7 +87,7 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        ;
+
     }
 
 
@@ -129,6 +129,18 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
                     }
                 });
 
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+
+                movieAdapter.getCurrentList().clear();
+                movieAdapter.notifyDataSetChanged();
+
+                movieListViewModel.refreshMovies();
+                return false;
+            }
+        });
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -154,8 +166,14 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
 
 
         movieListViewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieListViewModel.class);
+
+
         movieListViewModel.getMovies().observe(getViewLifecycleOwner(), movieList -> {
-            movieAdapter.updateList(movieList);
+            movieAdapter.submitList(movieList);
+        });
+
+        movieListViewModel.searchResultMovies.observe(getViewLifecycleOwner(), movieList -> {
+            movieAdapter.submitList(movieList);
         });
 
         movieListViewModel.getLoadingLiveData().observe(getViewLifecycleOwner(), new Observer<Boolean>() {

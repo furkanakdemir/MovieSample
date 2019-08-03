@@ -6,6 +6,8 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class MovieDateFormatter implements DateFormatter {
 
     @Inject
@@ -21,11 +23,9 @@ public class MovieDateFormatter implements DateFormatter {
 
             return format2.format(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            Timber.e(e, "Date: %s", dateString);
         }
 
         return "";
-
-
     }
 }

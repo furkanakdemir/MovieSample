@@ -2,14 +2,14 @@ package net.furkanakdemir.moviesample.data;
 
 public class Movie {
 
-    private String id;
+    private int id;
     private String name;
     private String releaseDate;
     private String overview;
     private String posterUrl;
     private String backdropUrl;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -33,9 +33,18 @@ public class Movie {
         return backdropUrl;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+
+        Movie article = (Movie) obj;
+        return article.id == this.id;
+    }
+
 
     public static final class MovieBuilder {
-        private String id;
+        private int id;
         private String name;
         private String releaseDate;
         private String overview;
@@ -49,7 +58,7 @@ public class Movie {
             return new MovieBuilder();
         }
 
-        public MovieBuilder id(String id) {
+        public MovieBuilder id(int id) {
             this.id = id;
             return this;
         }

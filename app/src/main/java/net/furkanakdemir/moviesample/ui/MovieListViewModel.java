@@ -1,46 +1,74 @@
 package net.furkanakdemir.moviesample.ui;
 
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
 
 import net.furkanakdemir.moviesample.data.Movie;
+import net.furkanakdemir.moviesample.data.MovieDomainMapper;
 import net.furkanakdemir.moviesample.data.MovieRepository;
-
-import java.util.List;
+import net.furkanakdemir.moviesample.network.MovieService;
+import net.furkanakdemir.moviesample.paging.MovieDataSourceFactory;
+import net.furkanakdemir.moviesample.paging.MovieSearchDataSourceFactory;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 
 public class MovieListViewModel extends ViewModel {
 
 
     private static final int LIMIT_SEARCH = 2;
+    private final MovieDataSourceFactory factory;
 
-    private MutableLiveData<List<Movie>> movies;
+    public LiveData<PagedList<Movie>> movies;
+
+
     private MutableLiveData<Boolean> loading = new MutableLiveData<>();
 
     private MovieRepository movieRepository;
+    private MovieService movieService;
+    private MovieDomainMapper mapper;
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
+    private MutableLiveData<String> searchLiveData = new MutableLiveData<>();
+    public LiveData<PagedList<Movie>> searchResultMovies = Transformations.switchMap(searchLiveData, new Function<String, LiveData<PagedList<Movie>>>() {
+        @Override
+        public LiveData<PagedList<Movie>> apply(String input) {
+
+            MovieSearchDataSourceFactory searchDataSourceFactory = new MovieSearchDataSourceFactory(movieService, mapper, input);
+
+            PagedList.Config config = new PagedList.Config.Builder().setEnablePlaceholders(true)
+                    .setInitialLoadSizeHint(20).setPageSize(20).build();
+            return new LivePagedListBuilder<>(searchDataSourceFactory, config).build();
+        }
+    });
+
+
     @Inject
-    public MovieListViewModel(MovieRepository movieRepository) {
+    public MovieListViewModel(MovieRepository movieRepository, MovieService movieService, MovieDomainMapper mapper) {
         this.movieRepository = movieRepository;
+        this.movieService = movieService;
+        this.mapper = mapper;
+
+        factory = new MovieDataSourceFactory(movieService, mapper);
+
+
+        PagedList.Config config = new PagedList.Config.Builder().setEnablePlaceholders(true)
+                .setInitialLoadSizeHint(20).setPageSize(20).build();
+
+        movies = new LivePagedListBuilder<>(factory, config).build();
+
+
     }
 
-    public LiveData<List<Movie>> getMovies() {
-        if (movies == null) {
-            movies = new MutableLiveData<>();
-            loadMovies();
-        }
+    public LiveData<PagedList<Movie>> getMovies() {
         return movies;
     }
 
@@ -48,74 +76,21 @@ public class MovieListViewModel extends ViewModel {
         return loading;
     }
 
-    private void loadMovies() {
-        loading.setValue(true);
-        movieRepository.getMovies()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate(() -> loading.setValue(false))
-                .subscribe(new Observer<List<Movie>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposables.add(d);
-                    }
-
-                    @Override
-                    public void onNext(List<Movie> movieList) {
-                        movies.setValue(movieList);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-    }
 
     public void search(String query) {
 
         if (query.length() > LIMIT_SEARCH) {
-            searchInternal(query);
+            searchLiveData.setValue(query);
         } else {
-            loadMovies();
+            refreshMovies();
         }
 
     }
 
-    private void searchInternal(String query) {
-        loading.setValue(true);
-        movieRepository.search(query)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate(() -> loading.setValue(false))
-                .subscribe(new Observer<List<Movie>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposables.add(d);
-                    }
-
-                    @Override
-                    public void onNext(List<Movie> movieList) {
-                        movies.setValue(movieList);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Timber.e(e);
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+    public void refreshMovies() {
+        if (factory.getSource().getValue() != null) {
+            factory.getSource().getValue().invalidate();
+        }
     }
 
     @Override

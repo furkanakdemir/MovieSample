@@ -7,8 +7,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import net.furkanakdemir.moviesample.R;
 import net.furkanakdemir.moviesample.data.Movie;
@@ -17,14 +18,27 @@ import net.furkanakdemir.moviesample.image.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieAdapter extends Adapter<MovieAdapter.MovieViewHolder> {
+public class MovieAdapter extends PagedListAdapter<Movie, MovieAdapter.MovieViewHolder> {
 
     private List<Movie> movies = new ArrayList<>();
     private OnMovieCallback onMovieCallback;
     private ImageLoader imageLoader;
 
+    private static DiffUtil.ItemCallback<Movie> DIFF_CALLBACK = new DiffUtil.ItemCallback<Movie>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
 
     public MovieAdapter(OnMovieCallback onMovieCallback, ImageLoader imageLoader) {
+        super(DIFF_CALLBACK);
+
         this.onMovieCallback = onMovieCallback;
         this.imageLoader = imageLoader;
     }
@@ -37,10 +51,11 @@ public class MovieAdapter extends Adapter<MovieAdapter.MovieViewHolder> {
         return new MovieViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
 
-        Movie movie = movies.get(position);
+        Movie movie = getItem(position);
 
         holder.nameTextView.setText(movie.getName());
         holder.releaseDateTextView.setText(movie.getReleaseDate());
@@ -54,17 +69,6 @@ public class MovieAdapter extends Adapter<MovieAdapter.MovieViewHolder> {
         holder.itemView.setOnClickListener(view -> onMovieCallback.onMovieClicked(movie));
     }
 
-    @Override
-    public int getItemCount() {
-        return movies.size();
-    }
-
-
-    public void updateList(List<Movie> newList) {
-        movies.clear();
-        movies.addAll(newList);
-        notifyDataSetChanged();
-    }
 
     class MovieViewHolder extends RecyclerView.ViewHolder {
         public TextView nameTextView;
@@ -80,6 +84,7 @@ public class MovieAdapter extends Adapter<MovieAdapter.MovieViewHolder> {
             overviewTextView = itemView.findViewById(R.id.overviewTextView);
         }
     }
+
 
     interface OnMovieCallback {
         void onMovieClicked(Movie movie);

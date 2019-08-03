@@ -22,6 +22,7 @@ public class MovieDomainMapper {
         return movieBuilder().name(movieRaw.title)
                 .releaseDate(dateFormatter.formatDate(movieRaw.releaseDate))
                 .posterUrl(movieRaw.posterPath)
+                .id(movieRaw.id)
                 .overview(movieRaw.overview)
                 .backdropUrl(movieRaw.backdropPath)
                 .build();
