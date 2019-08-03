@@ -172,7 +172,7 @@ public class MovieListFragment extends BaseFragment implements MovieAdapter.OnMo
             movieAdapter.submitList(movieList);
         });
 
-        movieListViewModel.searchResultMovies.observe(getViewLifecycleOwner(), movieList -> {
+        movieListViewModel.getSearchResultMovies().observe(getViewLifecycleOwner(), movieList -> {
             movieAdapter.submitList(movieList);
         });
 

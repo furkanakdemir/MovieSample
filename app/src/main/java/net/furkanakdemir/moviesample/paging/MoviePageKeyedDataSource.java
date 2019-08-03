@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
@@ -19,10 +20,12 @@ public class MoviePageKeyedDataSource extends PageKeyedDataSource<Integer, Movie
 
     private MovieService movieService;
     private MovieDomainMapper mapper;
+    private CompositeDisposable disposables;
 
-    public MoviePageKeyedDataSource(MovieService movieService, MovieDomainMapper mapper) {
+    public MoviePageKeyedDataSource(MovieService movieService, MovieDomainMapper mapper, CompositeDisposable disposables) {
         this.movieService = movieService;
         this.mapper = mapper;
+        this.disposables = disposables;
     }
 
     @Override
@@ -66,7 +69,7 @@ public class MoviePageKeyedDataSource extends PageKeyedDataSource<Integer, Movie
                 .subscribe(new Observer<List<Movie>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        disposables.add(d);
                     }
 
                     @Override
@@ -106,7 +109,7 @@ public class MoviePageKeyedDataSource extends PageKeyedDataSource<Integer, Movie
                 .subscribe(new Observer<List<Movie>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        disposables.add(d);
                     }
 
                     @Override

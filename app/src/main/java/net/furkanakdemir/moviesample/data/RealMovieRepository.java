@@ -1,62 +1,69 @@
 package net.furkanakdemir.moviesample.data;
 
-import net.furkanakdemir.moviesample.network.MovieService;
+import androidx.lifecycle.LiveData;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.furkanakdemir.moviesample.network.MovieService;
+import net.furkanakdemir.moviesample.paging.MovieDataSourceFactory;
+import net.furkanakdemir.moviesample.paging.MovieSearchDataSourceFactory;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
-import io.reactivex.functions.Function;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class RealMovieRepository implements MovieRepository {
 
 
+    private final MovieDataSourceFactory factory;
     private MovieService movieService;
     private MovieDomainMapper mapper;
+    private CompositeDisposable disposables;
 
     @Inject
     public RealMovieRepository(MovieService movieService,
-                               MovieDomainMapper mapper) {
+                               MovieDomainMapper mapper,
+                               CompositeDisposable disposables) {
 
         this.movieService = movieService;
         this.mapper = mapper;
+        this.disposables = disposables;
+
+
+        factory = new MovieDataSourceFactory(movieService, mapper, disposables);
+    }
+
+
+    @Override
+    public void refresh() {
+        if (factory.getSource().getValue() != null) {
+            factory.getSource().getValue().invalidate();
+        }
     }
 
     @Override
-    public Observable<List<Movie>> getMovies() {
-        return movieService.discover(1)
-                .map(new Function<MoviePageResponse, List<Movie>>() {
-                    @Override
-                    public List<Movie> apply(MoviePageResponse moviePageResponse) throws Exception {
+    public LiveData<PagedList<Movie>> getMoviesLiveData() {
 
-                        List<Movie> list = new ArrayList<>();
+        PagedList.Config config = new PagedList.Config.Builder().setEnablePlaceholders(true)
+                .setInitialLoadSizeHint(20).setPageSize(20).build();
+        return new LivePagedListBuilder<>(factory, config).build();
+    }
 
-                        for (MoviePageResponse.MovieRaw movieRaw : moviePageResponse.movieRawList) {
-                            list.add(mapper.map(movieRaw));
-                        }
 
-                        return list;
-                    }
-                });
+    @Override
+    public LiveData<PagedList<Movie>> getMovieSearchLiveData(String query) {
+        MovieSearchDataSourceFactory searchDataSourceFactory = new MovieSearchDataSourceFactory(movieService, mapper, disposables, query);
+
+        PagedList.Config config = new PagedList.Config.Builder().setEnablePlaceholders(true)
+                .setInitialLoadSizeHint(20).setPageSize(20).build();
+        return new LivePagedListBuilder<>(searchDataSourceFactory, config).build();
     }
 
     @Override
-    public Observable<List<Movie>> search(String query) {
-        return movieService.search(query, 1)
-                .map(new Function<MoviePageResponse, List<Movie>>() {
-                    @Override
-                    public List<Movie> apply(MoviePageResponse moviePageResponse) throws Exception {
-
-                        List<Movie> list = new ArrayList<>();
-
-                        for (MoviePageResponse.MovieRaw movieRaw : moviePageResponse.movieRawList) {
-                            list.add(mapper.map(movieRaw));
-                        }
-
-                        return list;
-                    }
-                });
+    public void clear() {
+        disposables.clear();
     }
 }
+
+
+

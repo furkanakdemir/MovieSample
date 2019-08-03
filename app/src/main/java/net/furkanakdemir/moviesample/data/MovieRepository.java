@@ -1,12 +1,16 @@
 package net.furkanakdemir.moviesample.data;
 
-import java.util.List;
-
-import io.reactivex.Observable;
+import androidx.lifecycle.LiveData;
+import androidx.paging.PagedList;
 
 public interface MovieRepository {
 
-    Observable<List<Movie>> getMovies();
+    void refresh();
 
-    Observable<List<Movie>> search(String query);
+    void clear();
+
+    LiveData<PagedList<Movie>> getMoviesLiveData();
+
+    LiveData<PagedList<Movie>> getMovieSearchLiveData(String query);
+
 }
