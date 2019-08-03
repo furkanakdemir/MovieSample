@@ -61,7 +61,7 @@ public class MovieDetailFragment extends BaseFragment {
 
         MovieViewItem movie = MovieDetailFragmentArgs.fromBundle(getArguments()).getMovie();
 
-        collapsingToolbarLayout.setTitle("Detail");
+        collapsingToolbarLayout.setTitle("");
 
         detailNameTextView.setText(movie.getName());
         detailDateTextView.setText(movie.getReleaseDate());
