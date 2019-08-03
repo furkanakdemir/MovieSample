@@ -5,6 +5,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import net.furkanakdemir.moviesample.R;
+
 import javax.inject.Inject;
 
 public class GlideImageLoader implements ImageLoader {
@@ -20,6 +22,10 @@ public class GlideImageLoader implements ImageLoader {
 
     @Override
     public void load(ImageView imageView, String imageUrl) {
-        Glide.with(context).load(imageUrl).into(imageView);
+        Glide.with(context)
+                .load(imageUrl)
+                .placeholder(R.drawable.ic_movie)
+                .error(R.drawable.ic_movie)
+                .into(imageView);
     }
 }
