@@ -11,6 +11,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+
+        buildConfigField "String", "BASE_URL_IMAGE", "\"https://image.tmdb.org/t/p/w500\""
     }
     buildTypes {
         release {

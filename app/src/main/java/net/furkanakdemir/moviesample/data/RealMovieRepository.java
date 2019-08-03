@@ -14,7 +14,6 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class RealMovieRepository implements MovieRepository {
 
-
     private final MovieDataSourceFactory factory;
     private MovieService movieService;
     private MovieDomainMapper mapper;
@@ -57,11 +56,6 @@ public class RealMovieRepository implements MovieRepository {
         PagedList.Config config = new PagedList.Config.Builder().setEnablePlaceholders(true)
                 .setInitialLoadSizeHint(20).setPageSize(20).build();
         return new LivePagedListBuilder<>(searchDataSourceFactory, config).build();
-    }
-
-    @Override
-    public void clear() {
-        disposables.clear();
     }
 }
 

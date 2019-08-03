@@ -11,6 +11,7 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.furkanakdemir.moviesample.BuildConfig;
 import net.furkanakdemir.moviesample.R;
 import net.furkanakdemir.moviesample.data.Movie;
 import net.furkanakdemir.moviesample.image.ImageLoader;
@@ -23,6 +24,9 @@ public class MovieAdapter extends PagedListAdapter<Movie, MovieAdapter.MovieView
     private List<Movie> movies = new ArrayList<>();
     private OnMovieCallback onMovieCallback;
     private ImageLoader imageLoader;
+
+
+    private static final String BASE_URL_IMAGE = BuildConfig.BASE_URL_IMAGE;
 
     private static DiffUtil.ItemCallback<Movie> DIFF_CALLBACK = new DiffUtil.ItemCallback<Movie>() {
         @Override
@@ -62,7 +66,7 @@ public class MovieAdapter extends PagedListAdapter<Movie, MovieAdapter.MovieView
         holder.overviewTextView.setText(movie.getOverview());
 
 
-        String imageUrl = "https://image.tmdb.org/t/p/w500" + movie.getPosterUrl();
+        String imageUrl = BASE_URL_IMAGE + movie.getPosterUrl();
         imageLoader.load(holder.posterImageView, imageUrl);
 
 

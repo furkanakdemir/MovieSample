@@ -7,8 +7,6 @@ public interface MovieRepository {
 
     void refresh();
 
-    void clear();
-
     LiveData<PagedList<Movie>> getMoviesLiveData();
 
     LiveData<PagedList<Movie>> getMovieSearchLiveData(String query);

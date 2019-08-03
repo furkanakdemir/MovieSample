@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
+import net.furkanakdemir.moviesample.BuildConfig;
 import net.furkanakdemir.moviesample.R;
 import net.furkanakdemir.moviesample.image.ImageLoader;
 import net.furkanakdemir.moviesample.ui.base.BaseFragment;
@@ -45,6 +46,9 @@ public class MovieDetailFragment extends BaseFragment {
     @Inject
     ImageLoader imageLoader;
 
+
+    private static final String BASE_URL_IMAGE = BuildConfig.BASE_URL_IMAGE;
+
     public MovieDetailFragment() {
         // Required empty public constructor
     }
@@ -66,7 +70,7 @@ public class MovieDetailFragment extends BaseFragment {
         detailNameTextView.setText(movie.getName());
         detailDateTextView.setText(movie.getReleaseDate());
         overviewTextView.setText(movie.getOverview());
-        String imageUrl = "https://image.tmdb.org/t/p/w500" + movie.getBackdropUrl();
+        String imageUrl = BASE_URL_IMAGE + movie.getBackdropUrl();
 
         imageLoader.load(posterImageView, imageUrl);
 
