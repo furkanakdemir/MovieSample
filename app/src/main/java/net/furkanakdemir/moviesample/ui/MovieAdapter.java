@@ -62,7 +62,7 @@ public class MovieAdapter extends PagedListAdapter<Movie, MovieAdapter.MovieView
         holder.overviewTextView.setText(movie.getOverview());
 
 
-        String imageUrl = "https://image.tmdb.org/t/p/w92" + movie.getPosterUrl();
+        String imageUrl = "https://image.tmdb.org/t/p/w500" + movie.getPosterUrl();
         imageLoader.load(holder.posterImageView, imageUrl);
 
 

@@ -66,7 +66,7 @@ public class MovieDetailFragment extends BaseFragment {
         detailNameTextView.setText(movie.getName());
         detailDateTextView.setText(movie.getReleaseDate());
         overviewTextView.setText(movie.getOverview());
-        String imageUrl = "https://image.tmdb.org/t/p/w92" + movie.getBackdropUrl();
+        String imageUrl = "https://image.tmdb.org/t/p/w500" + movie.getBackdropUrl();
 
         imageLoader.load(posterImageView, imageUrl);
 
